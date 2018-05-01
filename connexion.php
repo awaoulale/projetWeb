@@ -35,12 +35,14 @@
 	
 	    <br/>
 		<br/>
-		<br/>
-	    
-	
 		
-		<input type="submit"/>
+		
+		<input type="submit" value="Connexion"/>
 	</form>
+	
+	<small>Toujours pas inscrit? <a href="inscription.php">Créez vous un compte!</a>
+	
+	</small>
 	
 	</center>
 	
