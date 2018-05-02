@@ -1,3 +1,6 @@
+<?php
+session_start(); // On démarre la session AVANT toute chose
+?>
 <html>
 
  <head>
@@ -18,10 +21,8 @@
  </br> Postez votre CV, constituez votre réseau et profitez des offres de stages et d'emplois de nos alumnis!</p>
  <br/>
  
-	
-
     <form action="connexion_traitement.php" method="post">
-	
+		
 	    <label> mail</label>
 		<input type="text" name="mail"/><br/>
 		
@@ -35,15 +36,19 @@
 	
 	    <br/>
 		<br/>
-		<br/>
-	    
-	
 		
-		<input type="submit"/>
+		
+		<input type="submit" value="Connexion"/>
 	</form>
+	
+	<small>Toujours pas inscrit? <a href="inscription.php">Créez vous un compte!</a>
+	
+	</small>
 	
 	</center>
 	
 </body>	
 
 </html>
+
+

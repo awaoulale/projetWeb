@@ -1,4 +1,6 @@
 <?php
+//session_start();
+//include("vous.php")
 
 $serveur="localhost";
 $log="root";
@@ -8,10 +10,15 @@ $bdd="projetweb";
 $connect=mysqli_connect($serveur,$log,$mdp);
 $con=mysqli_select_db($connect,$bdd);
 
+//$mail=$_SESSION['mail'];
+//$pseudo=$_SESSION['pseudo'];
 $mail=$_POST['mail'];
 $pseudo=$_POST['pseudo'];
 
-		
+session_start();
+$_SESSION['mail'] =$_POST['mail'];
+$_SESSION['pseudo'] =$_POST['pseudo'];
+
 
 if(!$connect )
 	echo"pb de connexion";
@@ -29,7 +36,9 @@ else{
 			echo"Identifiant ou psuedo non reconnu";
 			}
 			else{
-				 header('Location: Accueil.php');
+				 //header('Location: accueil.html');
+				 header('Location: accueil.html');
+				 
                  exit();
 			}
 	
