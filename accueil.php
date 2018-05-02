@@ -1,3 +1,7 @@
+<?php
+session_start(); // On démarre la session AVANT toute chose
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -57,7 +61,7 @@
           </div>
         </div>       
       </div><!-- /.carousel-inner -->
-      <div class="logo">ECEPlouf</div> 
+      <div class="logo"><b><font size="20">ECEPlouf</font></b></div> 
       <!-- Controls -->
       <a class="left carousel-control" href="#myCarousel" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left"></span>
@@ -86,7 +90,7 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav nav-justified">
-          <li><a href="#section1">Accueil</a></li>
+          <li><a href="http://localhost:8888/OK/accueil/accueil.php">Accueil</a></li>
           <li><a href="http://localhost:8888/OK/accueil/monreseau.php">Mon reseau</a></li>
           <li><a href="http://localhost:8888/OK/accueil/vous.php">Vous</a></li>
           <li><a href="http://localhost:8888/OK/accueil/notifications.php">Notifications</a></li>
@@ -117,13 +121,13 @@
 
 <div class="row">
   	<div class="col-sm-10 col-sm-offset-1">
-      <h1>Votre Newsfeed</h1>
+  	  <h1> <?php 	echo "Bienvenue" . " " . $_SESSION['pseudo'] . "!" . "<br/>";  ?> </h1>
+      <h2>Votre Newsfeed</h2>
       
       <hr>
-      <p>Vos amis</p> 
-      <p>Vos offres</p> 
-      <p>Vos evenements </p> 
-      <p>Vos photos</p> 
+      <p>Publications</p> 
+      <p>Photos</p> 
+      <p>Videos</p> 
       <hr>
       
       <div class="divider"></div>
@@ -135,23 +139,14 @@
 <div class="bg-4">
   <div class="container">
 	<div class="row">
+		
 	
-		<div class="col-sm-12 col-xs-6"> 
-	    <div class="panel panel-default">
-	    	<div class="panel-thumbnail"><a href="#" title="Test publication"><img src="fleurs.jpg" class="img-responsive"></a></div>
-				<div class="panel-body">
-					<p> TEST PUBLICATION </p>
-			    </div>
-		</div><!--/panel-->
-		</div><!--/col-->
-	
-
 		<div class="col-sm-12 col-xs-6"> 
 	    <div class="panel panel-default">
 	    	<div class="panel-body">
-				 <p>
-				 	<?php echo "le php fonctionne!"; ?>
-				 </p>
+				 <p> <b>
+				 	<?php include("newsfeed.php"); ?>
+				 </b></p>
 			</div>
 
 		</div><!--/panel-->
@@ -165,10 +160,9 @@
 
 <div class="divider" id="section4"></div>
 
-
 <div id="footer">
   <div class="container">
-    <p class="text-muted">Copyright ©2018 ECE Paris, A. OULALE - M. TREVEULOT - E. VERMEULEN</p>
+    <p class="text-muted">Copyright ©2018 ECE Paris, A. OULALE - M. TREUVELOT - E. VERMEULEN</p>
   </div>
 </div>
 
