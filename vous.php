@@ -24,6 +24,9 @@ session_start();
   </ul>
 </div>
   
+  <div id="infos">
+ <h2>  Vous   </h2>
+</div>
 	
 	</center>
 	
@@ -39,7 +42,7 @@ $mdp="";
 
 $saut="</br>";
 
-$bdd="projetweb";
+$bdd="projet";
 $connect=mysqli_connect($serveur,$log,$mdp);
 $con=mysqli_select_db($connect,$bdd);
 
@@ -51,7 +54,7 @@ if(!$connect )
 else{
 	//on construit la requete
 		//$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN documents D ON U.id=D.id_auteur WHERE U.id=3";
-	$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN documents D ON U.id=D.id_auteur WHERE U.mail='$mail' AND U.pseudo='$pseudo'";
+	$sql="SELECT U.Nom,U.Prenom,U.mail,P.chemin FROM utilisateurs U JOIN profil P ON U.id=P.id_utilisateur WHERE U.mail='$mail' AND U.pseudo='$pseudo'";
 	
 	// on ecrit notre requete, on l enverra avec jquery
 	$res= mysqli_query($connect,$sql);
@@ -68,7 +71,10 @@ else{
 			echo$data['mail'];
 			echo$saut;
 			echo "Votre photo de profil <br/>";
-			echo '<img src="'.$data["chemin"].'.jpg" alt="Votre photo de profil" />';
+			echo '<img src="'.$data["chemin"].'" alt="Votre photo de profil" />';
+			echo$saut;
+			echo "Changez votre pdp si vous voulez";
+			
 			
 			//echo 'Votre login est'.$_SESSION['pseudo'].'et votre mail est :'.$_SESSION['mail'];
 		}
@@ -82,3 +88,7 @@ else{
 }
 
 ?>
+<html>
+<label> Changez de pdp </label>
+<input type="file" id="file" name="file" accept=".png, .jpg, .jpeg">
+</html>
