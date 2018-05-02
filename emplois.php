@@ -1,3 +1,7 @@
+<?php
+session_start(); 
+?>
+
 <html>
 
  <head>
@@ -16,7 +20,7 @@
   <ul id="onglets">
     <li class="active"><a href="emplois.php"> Emplois </a></li>
     <li><a href="accueil.html"> Accueil </a></li>
-    <li><a href="vous.html"> Vous </a></li>
+    <li><a href="vous.php"> Vous </a></li>
     <li><a href="reseau.html"> Votre réseau </a></li>
   </ul>
 </div>
@@ -55,10 +59,14 @@ else{
 
         echo '<article>';
 		echo '<h2 class=titre_job>'.$data['titre'].'</h2>';
+		echo '<h2 class=titre_job>'.$data['societe'].'</h2>';
 		echo '<p>'.$data['description'].'<p>';
 		echo '<p>Durée : '.$data['duree'].'<p>';
 		echo '<p>Type : '.$data['type'].'<p>';
-		echo '<p>Sécialité : '.$data['specialite'].'<p>';
+		echo '<p>Spécialité : '.$data['specialite'].'<p>';
+		echo '<p>Contact : '.$data['mail'].'<p>';
+	    
+		
         echo '</article>';
 
 	}
