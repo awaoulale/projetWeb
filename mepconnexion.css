@@ -1,5 +1,10 @@
 body {
        color: black;
 	   background-color: lightblue;
-	   
+	   background-image:url(partageechange.jpg);
+	   background-attachment:fixed;
+	   background-repeat:no-repeat;
+	   background-size: cover;
+	    
+ 
 } 

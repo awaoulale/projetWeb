@@ -1,18 +1,19 @@
 <?php
-
+//session_start();
+//include("vous.php")
 $serveur="localhost";
 $log="root";
 $mdp="";
-
 $bdd="projetweb";
 $connect=mysqli_connect($serveur,$log,$mdp);
 $con=mysqli_select_db($connect,$bdd);
-
+//$mail=$_SESSION['mail'];
+//$pseudo=$_SESSION['pseudo'];
 $mail=$_POST['mail'];
 $pseudo=$_POST['pseudo'];
-
-		
-
+session_start();
+$_SESSION['mail'] =$_POST['mail'];
+$_SESSION['pseudo'] =$_POST['pseudo'];
 if(!$connect )
 	echo"pb de connexion";
 else{
@@ -29,7 +30,11 @@ else{
 			echo"Identifiant ou psuedo non reconnu";
 			}
 			else{
-				 header('Location: Accueil.php');
+				$sql2="UPDATE `utilisateurs` SET `lastconnexion`=NOW() WHERE pseudo='$pseudo'";
+                $res2= mysqli_query($connect,$sql2);
+				//header('Location: accueil.html');
+				 header('Location: monreseau.php');
+				 
                  exit();
 			}
 	
@@ -40,10 +45,4 @@ else{
 	mysqli_free_result($res);
 	mysqli_close($connect);
 }
-
-
-
-
-
-
 ?>

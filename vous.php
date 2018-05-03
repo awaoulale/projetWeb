@@ -1,23 +1,28 @@
 <?php
 session_start(); 
 ?>
-
 <html>
-
  <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-		<title> ECEPlouf</title>
-		<meta name="generator" content="Bootply" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<!--[if lt IE 9]>
-			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link href="css/styles.css" rel="stylesheet">
- <link rel="stylesheet" href="emplois.css"  /> 
- </head>
+ 
+ 
 
+
+
+       <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	   <meta charset="utf-8">
+	   <title> ECEPlouf Vous</title>
+	   <meta name="generator" content="Bootply" />
+	   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	   <link href="css/bootstrap.min.css" rel="stylesheet">
+	   <!--[if lt IE 9]>
+	   <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	   <![endif]-->
+	   <link href="css/styles.css" rel="stylesheet">
+       <link rel="stylesheet" href="vous.css"  />
+ 
+
+ </head>
+ 
 
 <body>
 
@@ -79,65 +84,80 @@ echo'</div><!--/.navbar -->';
 
 ?>
 
+  
 
 
 
+
+<center>
+	
+<h1 class="logo"><img src="logoPlouf.png" alt="Logo" height="150" width="350"/></h1>
+
+
+  
+	
+	</center>
 	
 	
-<div id="infos">
- <h2>  Offres d'emplois et de stages disponibles   </h2>
-</div>
 	
 
-	
 <?php
-
+//session_start();
 $serveur="localhost";
 $log="root";
 $mdp="";
-
+$saut="</br>";
 $bdd="projetweb";
 $connect=mysqli_connect($serveur,$log,$mdp);
 $con=mysqli_select_db($connect,$bdd);
-		
+$mail=$_SESSION['mail'];
+$pseudo=$_SESSION['pseudo'];
 if(!$connect )
 	echo"pb de connexion";
 else{
 	//on construit la requete
-	$sql="SELECT * FROM emplois" ;
-		
+		//$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN documents D ON U.id=D.id_auteur WHERE U.id=3";
+	$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN profil D ON U.id=D.id_utilisateur WHERE U.mail='$mail' AND U.pseudo='$pseudo'";
+	
 	// on ecrit notre requete, on l enverra avec jquery
 	$res= mysqli_query($connect,$sql);
-	
-	while($data=mysqli_fetch_assoc($res)){
-
-        echo '<article>';
-		echo '<h2 class=titre_job>'.$data['titre'].'</h2>';
-		echo '<h2 class=titre_job>'.$data['societe'].'</h2>';
-		echo '<p>'.$data['description'].'<p>';
-		echo '<p>Durée : '.$data['duree'].'<p>';
-		echo '<p>Type : '.$data['type'].'<p>';
-		echo '<p>Spécialité : '.$data['specialite'].'<p>';
-		echo '<p>Contact : '.$data['mail'].'<p>';
-	    
-		
-        echo '</article>';
-
+	if($res){
+		//on traite les résultats
+		//chaque ligne
+		while($data=mysqli_fetch_assoc($res)){// tant qu on peut extraire
+			echo"Bonjour !";
+			echo$saut;
+			echo$data['Prenom'];
+			echo" ";
+			echo$data['Nom'];
+			echo$saut;
+			echo$data['mail'];
+			echo$saut;
+			echo "Votre photo de profil <br/>";
+			echo '<img src="'.$data["chemin"].'" alt="Votre photo de profil" />';
+			
+			//echo 'Votre login est'.$_SESSION['pseudo'].'et votre mail est :'.$_SESSION['mail'];
+		}
 	}
+	else{
+	echo "erreur requete";
 	
-	mysqli_free_result($res);
+	
+	}
 	mysqli_close($connect);
 }
-
 ?>
 
 
+
+
+	
 <div id="footer">
   <div class="container">
     <p class="text-muted">Copyright ©2018 ECE Paris, A. OULALE - M. TREUVELOT - E. VERMEULEN</p>
   </div>
 </div>
+
 	
 </body>	
-
 </html>
