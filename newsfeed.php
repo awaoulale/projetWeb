@@ -30,10 +30,11 @@ else
 	if($resultat1)
 	{
 		$tableau=array("");
-				
+		$tour=0;		
 		while($idami=mysqli_fetch_array($resultat1))
 		{
-		
+			$tour=$tour+1;
+			
 			$tableau2=array($idami["chemin"]);
 			
 			//condition pour ne pas afficher 2 fois la meme publication dans le fil d'actualite !
@@ -92,13 +93,13 @@ else
 				echo "<br/><br/>";
 				
 				
-				echo '<form action="newsfeed.php" method="post" disabled="disabled">';
-				echo '<input type="submit" name="test" value="Aimer"/>';
+				echo '<form action="newsfeed.php" method="post">';
+				echo '<input type="submit" name="'.$tour.'" value="Aimer"/>';
 				echo '</form>';
 				
 			
 				// si on appuie sur le bouton pour aimer
-				if (isset($_POST['test']))
+				if (isset($_POST[$tour]))
 				{
 					$requete1=mysqli_query($connect, "SELECT COUNT(*) AS nombre 
 													FROM reactions 
@@ -116,17 +117,14 @@ else
 					}
 				}
 				
-			
-			
-				
 				echo "<br/><hr><br/>";
 				
 				
 			}//fin du if d'affichage
 			
-		
+
 		} //fin du while requete
-					
+		
 		
 	} //fin du if requete		
 	
