@@ -90,6 +90,23 @@ else
 						echo $nb_3. " commentaire(s) <br/>" ;
 					}
 				}
+				
+				//affichage des commentaires				
+				$commentaires=mysqli_query($connect, "SELECT commentaire, pseudo
+														FROM reactions 
+														JOIN utilisateurs ON utilisateurs.id=reactions.id_utilisateur
+														WHERE id_doc='$id_doc'");
+				if($commentaires)
+				{
+					while($affichecommentaire=mysqli_fetch_array($commentaires))
+					{
+						$commentaire=$affichecommentaire["commentaire"];												
+						$auteur=$affichecommentaire["pseudo"]; //PB
+						echo '"'.$commentaire.'" par '.$auteur.'<br/>';
+					}
+				}
+				
+				
 			
 				//si le document est une photo .jpg
 				if( strstr($idami["chemin"], ".jpg"))
@@ -102,15 +119,23 @@ else
 				{
 					echo '<video controls src="'.$idami["chemin"].'" width="800" height="500">Ici la description alternative</video>';
 				}
+				
 				echo "<br/><br/>";
 				
-				
+				//mise en place des boutons
 				echo '<form action="newsfeed.php" method="post">';
+				//bouton aimer
 				echo '<input type="submit" name="'.$tour.'aimer" value="Aimer"/>';
 				echo " ";
+				//bouton ne plus aimer
 				echo '<input type="submit" name="'.$tour.'neplusaimer" value="Ne plus aimer"/>';
+				echo "<br/>";
+				//champ de texte pour le commentaire
+				//echo'<label>Entrez un commentaire</label>'; //moche
+				echo '<input type="text" name="'.$tour.'commentaire" />';
+				//bouton commenter
+				echo '<input type="submit" name="'.$tour.'commenter" value="Commenter"/>';
 				echo '</form>';
-				
 			
 				// si on appuie sur le bouton pour aimer
 				if (isset($_POST[$tour."aimer"]))
@@ -127,14 +152,13 @@ else
 							{
 								$requete2=mysqli_query($connect, "INSERT INTO reactions VALUES ('$id_doc','$id_utilisateur','oui','non',NULL)");
 							}
-							if($nombre!=0) // si la ligne existe pas, on la modifie
+							if($nombre!=0) // si la ligne existe, on la modifie
 							{
 								$requete2=mysqli_query($connect, "UPDATE reactions SET aime='oui' WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')");
 							}
 						}
 					}
 				}
-				
 				
 				// si on appuie sur le bouton pour ne plus aimer
 				if (isset($_POST[$tour."neplusaimer"]))
@@ -151,6 +175,34 @@ else
 							{
 								$requete2=mysqli_query($connect, "UPDATE reactions SET aime='non' WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')"); //OK
 							}
+						}
+					}
+				}
+				
+				// si on appuie sur le bouton pour commenter (ajouter un commentaire)
+				if (isset($_POST[$tour."commenter"]))
+				{
+					//echo "boutonok";
+					$nvcom=$_POST[$tour."commentaire"];
+					echo "$nvcom";
+					$requete1=mysqli_query($connect, "SELECT COUNT(*) AS nombre 
+													FROM reactions 
+													WHERE id_doc='$id_doc' AND id_utilisateur='$id_utilisateur'");								
+					if($requete1)
+					{
+						while($nbr=mysqli_fetch_array($requete1))
+						{
+							$nombre=$nbr["nombre"];
+							if($nombre==0) // si la ligne n'existe pas, on la crée
+							{
+								$requete2=mysqli_query($connect, "INSERT INTO reactions VALUES ('$id_doc','$id_utilisateur','non','non','$nvcom')");
+							}
+							if($nombre!=0) // si la ligne existe, on la modifie (concatenation avec les commentaires precedents)
+							{
+								$requete2=mysqli_query($connect, "UPDATE reactions SET commentaire=CONCAT(commentaire, ' | ', '$nvcom') WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')");
+							}
+							
+							
 						}
 					}
 				}
