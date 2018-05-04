@@ -10,7 +10,8 @@ session_start();
 
        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	   <meta charset="utf-8">
-	   <title> ECEPlouf Vous</title>
+	   <title> ECEPlouf Administrateur</title>
+	   <link rel="icon" type="image/png" href="plouf.jpg" />
 	   <meta name="generator" content="Bootply" />
 	   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +19,7 @@ session_start();
 	   <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	   <![endif]-->
 	   <link href="css/styles.css" rel="stylesheet">
-       <link rel="stylesheet" href="vous.css"  />
+        <link rel="stylesheet" href="emplois.css"  />
  
 
  </head>
@@ -70,7 +71,7 @@ echo'<div class="navbar navbar-custom navbar-inverse navbar-static-top" id="nav"
 		    $data=mysqli_fetch_assoc($res);
 	        if($data["type"]=="Auteur"){}
 			else{
-				echo'<li><a href="messagerie.php">Admin</a></li>';
+				echo'<li><a href="admin.php">Admin</a></li>';
 				}
 	}
  
@@ -84,16 +85,25 @@ echo'</div><!--/.navbar -->';
 
 ?>
 
-  
-
-
-
-
+<!--
 <center>
 	
 <h1 class="logo"><img src="logoPlouf.png"  height="150" width="350"/></h1>
 
 	</center>
+	-->
+	
+	
+	
+<div id="infos">
+ <h2>  Administrateur   </h2>
+</div>
+	
+  	
+	
+	
+	
+	
 	
 	
 	
@@ -113,28 +123,39 @@ if(!$connect )
 	echo"pb de connexion";
 else{
 	//on construit la requete
-		//$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN documents D ON U.id=D.id_auteur WHERE U.id=3";
-	$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN profil D ON U.id=D.id_utilisateur WHERE U.mail='$mail' AND U.pseudo='$pseudo'";
+		$sql="SELECT Nom,Prenom,mail,lastconnexion FROM utilisateurs ORDER BY lastconnexion DESC";
+	//$sql="SELECT U.Nom,U.Prenom,U.mail,D.chemin FROM utilisateurs U JOIN profil D ON U.id=D.id_utilisateur WHERE U.mail='$mail' AND U.pseudo='$pseudo'";
 	
 	// on ecrit notre requete, on l enverra avec jquery
 	$res= mysqli_query($connect,$sql);
 	if($res){
+		echo'<center>';
+		echo'<table>';
+            echo'<tr>';
+            echo'<td>Nom</td>';
+            echo'<td>Prenom</td>';
+            echo'<td>Mail</td>';
+			echo'<td>Derniere connexion</td>';
+            echo'</tr>';
 		//on traite les résultats
 		//chaque ligne
 		while($data=mysqli_fetch_assoc($res)){// tant qu on peut extraire
-			echo"Bonjour !";
-			echo$saut;
-			echo$data['Prenom'];
-			echo" ";
-			echo$data['Nom'];
-			echo$saut;
-			echo$data['mail'];
-			echo$saut;
-			echo "Votre photo de profil <br/>";
-			echo '<img src="'.$data["chemin"].'" alt="Votre photo de profil" />';
 			
-			//echo 'Votre login est'.$_SESSION['pseudo'].'et votre mail est :'.$_SESSION['mail'];
+           
+			
+			
+			
+			echo'<tr>';
+			echo'<td>'.$data['Nom'].'</td>';
+			echo'<td>'.$data['Prenom'].'</td>';
+			echo'<td>'.$data['mail'].'</td>';
+			echo'<td>'.$data['lastconnexion'].'</td>';
+			echo'</tr>';
+			
+		
 		}
+		 echo'</table>';
+		 echo'</center>';
 	}
 	else{
 	echo "erreur requete";
@@ -145,6 +166,33 @@ else{
 }
 ?>
 
+	
+
+<form method="post" action="supression_utilisateur_inactif.php">
+  <fieldset>
+    <h7>Supprimer des utilisateurs dont la derniere connexion date de plus de :</h7>
+    <div>
+      <input type="radio" id="contactChoice1"
+       name="seuil_date" value="1">
+      <label for="contactChoice1">1 an</label>
+      <input type="radio" id="contactChoice1"
+       name="seuil_date" value="2">
+      <label for="contactChoice1">2 ans</label>
+      <input type="radio" id="contactChoice1"
+       name="seuil_date" value="3">
+      <label for="contactChoice1">3 ans</label>
+      <input type="radio" id="contactChoice1"
+       name="seuil_date" value="4">
+      <label for="contactChoice1">4 ans</label>
+      <input type="radio" id="contactChoice1"
+       name="seuil_date" value="5" checked>
+      <label for="contactChoice1">5 ans</label>
+      <button type="submit">Supprimer</button>
+
+    </div>
+  </fieldset>
+</form>
+	
 
 
 

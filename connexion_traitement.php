@@ -34,7 +34,7 @@ else{
                 $res2= mysqli_query($connect,$sql2);
 				//header('Location: accueil.html');
 				 header('Location: monreseau.php');
-				 
+                //header('Location: newsfeed.php');				 
                  exit();
 			}
 	

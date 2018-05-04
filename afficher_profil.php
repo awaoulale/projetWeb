@@ -1,12 +1,9 @@
-<?php
-session_start(); 
-?>
 <html>
  <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title> ECEPlouf mon réseau</title>
-		<link rel="icon" type="image/png" href="plouf.jpg" />
+		<title> ECEPlouf Afficher profil</title>
+	    <link rel="icon" type="image/png" href="plouf.jpg" />
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -23,7 +20,7 @@ session_start();
 
 
 <?php
- //session_start();
+ session_start();
 $serveur="localhost";
 $log="root";
 $mdp="";
@@ -81,14 +78,22 @@ echo'</div><!--/.navbar -->';
 ?>
 
 
-<div id="infos">
- <h2>  Mon réseau   </h2>
-</div>
-	
+
+
+
 
 
 
 <?php
+
+$data=explode(" ", $_POST['utilisateurs']);
+$nom = $data[0];
+$prenom = $data[1];
+
+echo '<div id="infos">';
+echo '<h2>  Profil de '.$prenom.' '.$nom.'</h2>';
+echo '</div>';
+  
 //session_start(); // On démarre la session AVANT toute chose
 	$serveur="localhost";
     $log="root";
@@ -105,64 +110,74 @@ echo'</div><!--/.navbar -->';
 	echo"pb de connexion";
 else
 {
-	// Barre de recherche
-	echo '<div id="searchbar">';
-	echo '<form method="post" action="afficher_profil.php">';
-	echo '   <p>';
-	echo '       <label for="utilisateurs">Rechercher quelqu\'un</label><br />';
-	echo '       <select name="utilisateurs" id="utilisateurs">';
-		$resultat1=mysqli_query($connect, "SELECT Nom,Prenom FROM utilisateurs WHERE mail<>'$mail'");
-		if($resultat1)
-		{
-			while($data=mysqli_fetch_array($resultat1))
-			{
-			   echo '<option value="'.$data["Nom"]." ".$data["Prenom"]."\">".
-			   $data["Nom"]." ".$data["Prenom"].'
-			   </option>';
-			}
-		}
-	echo '       </select>';
-	echo '       <input class="bouton" type="submit" value=" " />';
-	echo '   </p>';
-
-	echo '	</form>';
-	echo '</div>';
-	// Fin barre de recherche
 	
-			// $resultat1=mysqli_query($connect, "SELECT Nom,Prenom FROM utilisateurs"); 
-					// while($data=mysqli_fetch_array($resultat1))
-			// {
-			   // echo '<option value=\"'.$data["Nom"]." ".$data["Prenom"]."\">".
-			   // $data["Nom"]." ".$data["Prenom"].'
-			   // </option>';
-			// }
-	
-	
-	// Affichage des amis	
-	$resultat1=mysqli_query($connect, "SELECT U.Nom,U.Prenom,P.chemin
-	  FROM utilisateurs U, profil P, amis A
-          WHERE A.id_ami1=(SELECT id FROM utilisateurs WHERE pseudo='$pseudo')
-          AND P.id_utilisateur=A.id_ami2
-          AND P.id_utilisateur=U.id");
+	// Recherche du profil
+		$resultat1=mysqli_query($connect, "SELECT U.Nom,U.Prenom,P.chemin 
+	  FROM utilisateurs U, profil P
+          WHERE U.Nom='$nom' AND U.Prenom='$prenom' AND U.id=P.id_utilisateur");
 	if($resultat1)
 	{
-		while($idami=mysqli_fetch_array($resultat1))
-		{
-			//echo $idami["Prenom"]. " " .$idami["Nom"]. "<br/>". "<br/>";
-			
-			//$id_doc=$idami["id_doc"];
-			
-			echo '<img src="'.$idami["chemin"].'" alt="photo" height="150" width="150" />';
-			//echo '<span class="marge">';
-			echo $idami["Prenom"]. " " .$idami["Nom"]. "<br/>". "<br/>";
-			//echo '</span>';
-			echo "<br/><br/><br/>";
-		}
-	}
+		$idami=mysqli_fetch_array($resultat1);			
+		echo '<img src="'.$idami["chemin"].'" alt="photo" height="150" width="150" />';
+		echo $idami["Prenom"]. " " .$idami["Nom"]. "<br/>". "<br/>";
 		
+	}
+	
+	
+		// Recherche du cv
+		$resultat3=mysqli_query($connect, "SELECT C.naissance,C.specialite,C.diplome,C.experience,C.hobbys 
+		FROM utilisateurs U, cv C 
+		WHERE U.id=C.id_auteur AND U.id=(SELECT id FROM utilisateurs WHERE Nom='$nom' AND Prenom='$prenom')");
+	if($resultat3)
+	{
+		$data3=mysqli_fetch_array($resultat3);			
+		echo "Date de naissance : " .$data3["naissance"]. "<br/>" . "Spcialites : " .$data3["specialite"]. "<br/>". 
+		"Diplome : ".$data3["diplome"]. "<br/>" ."Experiences : " .$data3["experience"]."<br/>" ."Hobbys : ".$data3["hobbys"];
+		
+	}
+
+
+
+	
+	echo "<br/><br/><br/>";	
+	
+	
+		$resultat1=mysqli_query($connect, "SELECT U.id
+	  FROM utilisateurs U 
+          WHERE U.Nom='$nom' AND U.Prenom='$prenom'");
+	if($resultat1)
+	{
+		$idami=mysqli_fetch_array($resultat1);			
+		$id2 = $idami["id"];
+//		echo '*'.$id2.'*';
+	}
+
+
+	$resultat1=mysqli_query($connect, "SELECT U.Nom 
+	  FROM utilisateurs U, amis A 
+          WHERE A.id_ami1=(SELECT id FROM utilisateurs WHERE mail='$mail' AND pseudo='$pseudo')
+          AND A.id_ami2='$id2'");
+
+	$data=mysqli_fetch_assoc($resultat1);
+	 if($data==""){
+		
+		echo 'Pas encore amis';
+		echo '<form action="nouvel_ami.php" method="post">';		
+			echo '<input type="submit" value="Ajouter comme ami"/>';
+			echo '<input type="hidden" name="id_ami" value='.$id2.' />';
+		echo '</form>';
+		
+	}
+	else {
+		echo 'Deja amis';
+		echo '<form action="plus_ami.php" method="post">';		
+		echo '<input type="submit" value="Supprimer comme ami"/>';
+		echo '<input type="hidden" name="id_ami" value='.$id2.' />';
+		echo '</form>';
+	}		
 	
 }	
-
+		
 ?>
 
 

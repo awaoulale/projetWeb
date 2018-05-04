@@ -5,7 +5,8 @@ session_start();
  <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title> ECEPlouf</title>
+		<title> ECEPlouf Notifications</title>
+		<link rel="icon" type="image/png" href="plouf.jpg" />
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -17,10 +18,10 @@ session_start();
  </head>
 
 
-<body style="background-color:powderblue;">
+<body style="background-color:lightblue;">
 <center>
 	
-<h1 class="logo"><img src="logoPlouf.png" alt="Logo" height="150" width="350"/></h1>
+<!--<h1 class="logo"><img src="logoPlouf.png" alt="Logo" height="150" width="350"/></h1>  -->
 
 
 <?php
@@ -67,7 +68,7 @@ echo'<div class="navbar navbar-custom navbar-inverse navbar-static-top" id="nav"
 		    $data=mysqli_fetch_assoc($res);
 	        if($data["type"]=="Auteur"){}
 			else{
-				echo'<li><a href="messagerie.php">Admin</a></li>';
+				echo'<li><a href="admin.php">Admin</a></li>';
 				}
 	}
  
@@ -119,7 +120,7 @@ FROM utilisateurs U, reactions R,documents D
 
 WHERE D.id_doc=R.id_doc
 
- AND D.id_auteur=(SELECT id FROM utilisateurs WHERE pseudo='AOulale')
+ AND D.id_auteur=(SELECT id FROM utilisateurs WHERE pseudo='$pseudo')
  AND R.id_utilisateur=U.id
 GROUP BY R.date_reaction DESC";
 	
@@ -156,7 +157,7 @@ GROUP BY R.date_reaction DESC";
 			echo '<img src="'.$data["chemin"].'" alt="Votre photo" height="300" width="300"/>';
 			echo'</br> </br>';
 			
-			//echo 'Votre login est'.$_SESSION['pseudo'].'et votre mail est :'.$_SESSION['mail'];
+			
 		}
 	}
 	else{

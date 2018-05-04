@@ -39,10 +39,26 @@ else{
 				if($data2==""){
 				$sql="INSERT INTO utilisateurs VALUES(NULL,'$nom','$prenom','$mail','$pseudo',NULL,'Auteur')";
 				$res= mysqli_query($connect,$sql);
+				
+				
+				//Définir la photo de profil par défaut
+				$sql2="INSERT INTO profil VALUES((SELECT id FROM utilisateurs WHERE mail='$mail'),'photopardefaut',NULL)";
+				$res= mysqli_query($connect,$sql2);
+				
+				
+				//Définir le cv par défaut
+				$sql3="INSERT INTO cv VALUES(NULL,(SELECT id FROM utilisateurs WHERE mail='$mail'),'','','','',NULL)";
+				$res= mysqli_query($connect,$sql3);
+				
+				
+				
 				echo"Vous êtes inscrit,revenez sur la page d'accueil pour vous connecter.";
+			    echo "<a href='connexion.php'> Page d'accueil </a>";
+			 
                 }
 				
 				else {echo"Vous êtes déjà incrit sur le site!";}
+				echo "<a href='connexion.php'> Page d'accueil </a>";
 				
 			}
 	

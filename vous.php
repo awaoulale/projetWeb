@@ -11,6 +11,7 @@ session_start();
        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	   <meta charset="utf-8">
 	   <title> ECEPlouf Vous</title>
+	   <link rel="icon" type="image/png" href="plouf.jpg" />
 	   <meta name="generator" content="Bootply" />
 	   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -70,7 +71,7 @@ echo'<div class="navbar navbar-custom navbar-inverse navbar-static-top" id="nav"
 		    $data=mysqli_fetch_assoc($res);
 	        if($data["type"]=="Auteur"){}
 			else{
-				echo'<li><a href="messagerie.php">Admin</a></li>';
+				echo'<li><a href="admin.php">Admin</a></li>';
 				}
 	}
  
@@ -84,7 +85,8 @@ echo'</div><!--/.navbar -->';
 
 ?>
 
-  
+
+
 
 
 
