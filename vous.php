@@ -21,6 +21,7 @@ $specialite=$_SESSION['specialite'];
 $diplome=$_SESSION['diplome'];
 $hobbys=$_SESSION['hobbys'];
 $experience=$_SESSION['experience'];
+//$Pchemin=$_SESSION['chemin'];
 
 if(!$connect )
 	echo"pb de connexion";
@@ -50,8 +51,6 @@ else{
 			echo '<img src="'.$data["chemin"].'" alt="Votre photo de profil" />';
 			echo$saut;
 			echo$saut;
-			//echo "Changez votre pdp si vous voulez";
-			
 			echo"Voici votre CV : ";
 			echo$saut;
 			echo$saut;
@@ -68,7 +67,7 @@ else{
 			echo$data['experience']; 
 			echo$saut;
 			echo "Votre naissance : ";
-			if($data['naissance']!='2018-05-03')
+			if($data['naissance']!='NULL') //Voir la valeur par défaut
 			{
 				echo$data['naissance']; 
 			}
@@ -86,14 +85,54 @@ else{
 	mysqli_close($connect);
 }
 
-?>
 
-<!-- <html>
-<label> Changez de pdp </label>
-<input type="file" id="file" name="file" accept=".png, .jpg, .jpeg">
-</html> -->
+?>
 
 <link rel="stylesheet" href="boutonCV.css" />
 <a class="stylebouton" href="cv.php">Modifier mon CV</a>
+
+</br>
+</br>
+
+
+<?php //echo "Changez votre pdp si vous voulez";  
+
+//move_uploaded_file("image.jpg", "C:/wamp/www/projetWeb/image.jpg"); ?> 
+
+
+
+<html>
+
+<form action="file.php" method="post" enctype="multipart/form-data"> 
+  <div>
+    <label for="profile_pic">Sélectionnez le fichier à utiliser pour changer votre photo de profil</label>
+    <input type="file" id="profile_pic" name="profile_pic"
+          accept=".jpg, .jpeg, .png"> 
+		  
+		 <!-- <input type="file" id="profile_pic" name="<?php //echo$profile_pic ?>"
+          accept=".jpg, .jpeg, .png"> -->
+		   
+		  
+		  <?php //$fichier = $FILES['profile_pic']['name']; 
+		  //$fichier = $_FILES['profile_pic']['name']; 
+		  //echo 'Voici quelques informations de débogage :';
+//print_r(basename($_FILES['userfile']['name']))
+		  		  
+				//echo"le nom du fichier est ".$fichier; ?>
+				
+				<a class="stylebouton" href="file.php">Que dit $FILES </a>
+		  
+  </div>
+  <div>
+  </br>
+   <!-- <button>Envoyer</button> -->
+	<a class="stylebouton" href="changeProfil_traitement.php">Modifier ma photo de profil</a>
+  </div>
+</form>
+
+</br>
+</br>
+
+</html> 
 
 <?php include("footer.php"); ?>
