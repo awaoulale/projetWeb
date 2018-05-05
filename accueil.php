@@ -64,7 +64,7 @@ session_start(); // On démarre la session AVANT toute chose
 	$log="root";
 	$mdp="root";
 
-	$bdd="projetweb";
+	$bdd="projetweb1";
 	$connect=mysqli_connect($serveur,$log,$mdp);
 	$con=mysqli_select_db($connect,$bdd);
 
@@ -194,7 +194,7 @@ else
 				//bouton commenter
 				echo '<input type="submit" name="'.$tour.'commenter" value="Commenter"/>';
 				echo "<br/><br/>";
-				//bouton commenter
+				//bouton partager
 				echo '<input type="submit" name="'.$tour.'partager" value="Partager"/>';
 				echo '</form>';
 			
@@ -212,11 +212,12 @@ else
 							if($nombre==0) // si la ligne n'existe pas, on la crée
 							{
 								$requete2=mysqli_query($connect, "INSERT INTO reactions VALUES ('$id_doc','$id_utilisateur','oui','non',NULL)");
-
+								header('Location: accueil.php');								
 							}
 							if($nombre!=0) // si la ligne existe, on la modifie
 							{
 								$requete2=mysqli_query($connect, "UPDATE reactions SET aime='oui' WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')");
+								header('Location: accueil.php');								
 							}
 						}
 					}
@@ -236,6 +237,7 @@ else
 							if($nombre!=0) // si la ligne existe, on la modifie
 							{
 								$requete2=mysqli_query($connect, "UPDATE reactions SET aime='non' WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')"); //OK
+								header('Location: accueil.php');								
 							}
 						}
 					}
@@ -244,7 +246,7 @@ else
 				// si on appuie sur le bouton pour commenter (ajouter un commentaire)
 				if (isset($_POST[$tour."commenter"]))
 				{
-					//echo "boutonok";
+
 					$nvcom=$_POST[$tour."commentaire"];
 					echo "$nvcom";
 					$requete1=mysqli_query($connect, "SELECT COUNT(*) AS nombre 
@@ -258,16 +260,54 @@ else
 							if($nombre==0) // si la ligne n'existe pas, on la crée
 							{
 								$requete2=mysqli_query($connect, "INSERT INTO reactions VALUES ('$id_doc','$id_utilisateur','non','non','$nvcom')");
+								header('Location: accueil.php');								
 							}
 							if($nombre!=0) // si la ligne existe, on la modifie (concatenation avec les commentaires precedents)
 							{
 								$requete2=mysqli_query($connect, "UPDATE reactions SET commentaire=CONCAT(commentaire, ' | ', '$nvcom') WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')");
+								header('Location: accueil.php');								
 							}
-							
-							
 						}
 					}
 				}
+				
+				// si on appuie sur le bouton pour partager (ajouter une ligne dans ses propres documents mais en precisant que c'est un PARTAGE
+				if (isset($_POST[$tour."partager"]))
+				{
+					//echo "ok1";
+					$id_utilisateur=$ressql["id"];
+					$chemin=$idami["chemin"];
+					//ajouter la publication dans ses propres documents
+					$requete1=mysqli_query($connect, "INSERT INTO documents (id_auteur, chemin) VALUES ('$id_utilisateur', '$chemin') "); //OK
+					header('Location: accueil.php');								
+					//ajouter la ligne dans ta table reactions
+					$requete3=mysqli_query($connect, "SELECT COUNT(*) AS nombre 
+													FROM reactions 
+													WHERE id_doc='$id_doc' AND id_utilisateur='$id_utilisateur'");								
+					if($requete3)
+					{
+						echo "ok2";
+						while($nbr=mysqli_fetch_array($requete3))
+						{
+							echo "ok3";
+							$nombre=$nbr["nombre"];
+							if($nombre==0) // si la ligne n'existe pas, on la crée
+							{
+								$requete2=mysqli_query($connect, "INSERT INTO reactions VALUES ('$id_doc','$id_utilisateur','non','oui',NULL)");
+								header('Location: accueil.php');								
+							}
+							if($nombre!=0) // si la ligne existe, on la modifie
+							{
+								$requete2=mysqli_query($connect, "UPDATE reactions SET partage='oui' WHERE (id_doc='$id_doc' AND id_utilisateur='$id_utilisateur')");
+								header('Location: accueil.php');								
+							}
+						}
+					}
+											
+				}
+				
+				
+				
 				
 				
 				
@@ -285,11 +325,12 @@ else
 	
 }	//fin du else	
 ?>
-				 	
-				 	
-				 	
-				 	
-				 	
+
+
+
+
+
+
 				 	
 				 </p>
 			</div>
